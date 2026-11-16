@@ -1,0 +1,35 @@
+{
+  "name": "saju-reverse",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "사주팔자 역산 — 간지를 넣으면 실제 생년월일시를 찾아주는 PWA",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "start": "npm run build && vite preview --open --port 4173",
+    "icons": "node scripts/generate-icons.mjs",
+    "gen:vsop": "node scripts/gen-vsop87.mjs",
+    "validate": "esbuild scripts/validate.ts --bundle --platform=node --format=esm --outfile=.tmp-validate.mjs --external:manseryeok && node .tmp-validate.mjs"
+  },
+  "dependencies": {
+    "korean-lunar-calendar": "^0.4.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
+    "astronomia": "^4.3.0",
+    "autoprefixer": "^10.4.20",
+    "manseryeok": "^2.0.0",
+    "postcss": "^8.4.49",
+    "sharp": "^0.33.5",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11",
+    "vite-plugin-pwa": "^0.21.1"
+  }
+}
