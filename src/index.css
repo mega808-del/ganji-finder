@@ -1,0 +1,477 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ------------------------------------------------------------------ */
+/* Base                                                                */
+/* ------------------------------------------------------------------ */
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  html,
+  body,
+  #root {
+    min-height: 100%;
+  }
+
+  body {
+    margin: 0;
+    background:
+      radial-gradient(120% 55% at 50% 0%, #1b2b49 0%, rgba(15, 23, 42, 0) 62%),
+      radial-gradient(90% 45% at 50% 100%, #12203a 0%, rgba(15, 23, 42, 0) 72%),
+      #0f172a;
+    background-attachment: fixed;
+    color: #e8eef8;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo',
+      'Malgun Gothic', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior-y: none;
+  }
+
+  button {
+    font: inherit;
+    color: inherit;
+  }
+
+  select {
+    font: inherit;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* 3D 입체 버튼                                                        */
+/* ------------------------------------------------------------------ */
+
+.btn3d {
+  --btn-top: #3a4f78;
+  --btn-bottom: #1d2a46;
+  --btn-edge: #0a1120;
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 16px;
+  padding: 0.9rem 1.1rem;
+  color: #ffffff;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  background: linear-gradient(180deg, var(--btn-top) 0%, var(--btn-bottom) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.24),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.4),
+    0 5px 0 var(--btn-edge),
+    0 9px 18px rgba(0, 0, 0, 0.5);
+  transform: translateY(0);
+  transition:
+    transform 90ms ease,
+    box-shadow 90ms ease,
+    filter 120ms ease,
+    background 160ms ease;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.65);
+  user-select: none;
+  touch-action: manipulation;
+}
+
+.btn3d:active:not(:disabled) {
+  transform: translateY(5px);
+  box-shadow:
+    inset 0 2px 7px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 0 0 var(--btn-edge),
+    0 2px 5px rgba(0, 0, 0, 0.45);
+}
+
+.btn3d:focus-visible {
+  outline: 2px solid #ffc65c;
+  outline-offset: 2px;
+}
+
+.btn3d:disabled {
+  opacity: 0.42;
+  filter: saturate(0.65);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 4px 0 #070d18,
+    0 6px 12px rgba(0, 0, 0, 0.35);
+}
+
+/* 주 실행 버튼 (역산 실행) */
+.btn3d--primary {
+  --btn-top: #c9760d;
+  --btn-bottom: #8a3f05;
+  --btn-edge: #3d1a02;
+  font-size: 1.0625rem;
+  letter-spacing: 0.04em;
+}
+
+/* 설치 버튼 (헤더 우측 상단) */
+.btn3d--install {
+  --btn-top: #2f9e5f;
+  --btn-bottom: #176b3c;
+  --btn-edge: #06301a;
+  gap: 0.28rem;
+  padding: 0.45rem 0.65rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.26),
+    0 3px 0 var(--btn-edge),
+    0 5px 10px rgba(0, 0, 0, 0.45);
+}
+
+/* 보조 버튼 (초기화) */
+.btn3d--ghost {
+  --btn-top: #26344f;
+  --btn-bottom: #161f33;
+  --btn-edge: #080d16;
+}
+
+/* 큰 입력 행 (년주/월주/일주/시주) */
+.btn3d--row {
+  justify-content: space-between;
+  padding: 0.85rem 1rem;
+  border-radius: 18px;
+  --btn-top: #2c3d5f;
+  --btn-bottom: #1a2439;
+  --btn-edge: #080d16;
+}
+
+.btn3d--row-muted {
+  --btn-top: #212c44;
+  --btn-bottom: #151d2e;
+}
+
+.btn3d--sm {
+  padding: 0.55rem 0.85rem;
+  border-radius: 12px;
+  font-size: 0.8125rem;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 3px 0 var(--btn-edge),
+    0 5px 10px rgba(0, 0, 0, 0.45);
+}
+
+/* ------------------------------------------------------------------ */
+/* 천간·지지 키패드                                                    */
+/* ------------------------------------------------------------------ */
+
+.key3d {
+  --el-top: #33456b;
+  --el-bottom: #1c2740;
+  --el-edge: #0a1120;
+  --el-ink: #ffffff;
+  --el-ink-soft: rgba(255, 255, 255, 0.62);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.1rem;
+  min-height: 58px;
+  border-radius: 13px;
+  padding: 0.35rem 0.15rem;
+  color: var(--el-ink);
+  background: linear-gradient(180deg, var(--el-top) 0%, var(--el-bottom) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.35),
+    0 4px 0 var(--el-edge),
+    0 6px 12px rgba(0, 0, 0, 0.45);
+  transform: translateY(0);
+  transition:
+    transform 90ms ease,
+    box-shadow 90ms ease,
+    background 140ms ease;
+  touch-action: manipulation;
+}
+
+.key3d:active {
+  transform: translateY(4px);
+  box-shadow:
+    inset 0 2px 8px rgba(0, 0, 0, 0.45),
+    0 0 0 var(--el-edge),
+    0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.key3d__hanja {
+  font-size: 1.3rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.key3d__ko {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--el-ink-soft);
+}
+
+/* 선택된 간지 — 오행 색은 유지하고 금색 테두리로 강조 */
+.key3d.is-active {
+  filter: brightness(1.16) saturate(1.06);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.25),
+    0 0 0 3px #ffcf6e,
+    0 4px 0 var(--el-edge),
+    0 6px 14px rgba(0, 0, 0, 0.55);
+}
+
+.key3d:disabled {
+  opacity: 0.26;
+  filter: saturate(0.35);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 3px 0 #070d18;
+}
+
+.key3d:focus-visible {
+  outline: 2px solid #ffc65c;
+  outline-offset: 2px;
+}
+
+/* ------------------------------------------------------------------ */
+/* 오행 바탕색 (천을귀인 만세력 기준)                                  */
+/* ------------------------------------------------------------------ */
+
+.el-mok {
+  --el-top: #43a35e;
+  --el-bottom: #1c7a3e;
+  --el-edge: #0c3d1f;
+  --el-ink: #ffffff;
+  --el-ink-soft: rgba(255, 255, 255, 0.84);
+  --el-ring: rgba(255, 255, 255, 0.22);
+}
+
+.el-hwa {
+  --el-top: #e2504b;
+  --el-bottom: #a01f1c;
+  --el-edge: #4d0d0c;
+  --el-ink: #ffffff;
+  --el-ink-soft: rgba(255, 255, 255, 0.72);
+  --el-ring: rgba(255, 255, 255, 0.22);
+}
+
+.el-to {
+  --el-top: #f5c935;
+  --el-bottom: #cf9905;
+  --el-edge: #6b4e02;
+  --el-ink: #241a04;
+  --el-ink-soft: rgba(36, 26, 4, 0.72);
+  --el-ring: rgba(0, 0, 0, 0.22);
+}
+
+.el-geum {
+  --el-top: #ffffff;
+  --el-bottom: #dce4ef;
+  --el-edge: #7d8b9e;
+  --el-ink: #0f172a;
+  --el-ink-soft: rgba(15, 23, 42, 0.66);
+  --el-ring: rgba(0, 0, 0, 0.18);
+}
+
+.el-su {
+  --el-top: #2c303a;
+  --el-bottom: #04060a;
+  --el-edge: #000000;
+  --el-ink: #ffffff;
+  --el-ink-soft: rgba(255, 255, 255, 0.8);
+  --el-ring: rgba(255, 255, 255, 0.3);
+}
+
+/* 간지 한 글자 타일 — 천간·지지 각각의 오행 색 바탕 */
+.ganji-tile {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--el-ring, rgba(255, 255, 255, 0.2));
+  background: linear-gradient(180deg, var(--el-top) 0%, var(--el-bottom) 100%);
+  color: var(--el-ink);
+  font-weight: 800;
+  line-height: 1;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    0 2px 0 var(--el-edge);
+}
+
+/* ------------------------------------------------------------------ */
+/* 입력 필드 · 카드 · 칩                                               */
+/* ------------------------------------------------------------------ */
+
+.field3d {
+  width: 100%;
+  appearance: none;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 14px;
+  background: linear-gradient(180deg, #0b1526 0%, #14203a 100%);
+  box-shadow:
+    inset 0 2px 7px rgba(0, 0, 0, 0.65),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.05),
+    0 1px 0 rgba(255, 255, 255, 0.04);
+  color: #ffffff;
+  text-align: center;
+  text-align-last: center;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.field3d--text {
+  padding: 0 0.9rem;
+  text-align: left;
+  text-align-last: left;
+  letter-spacing: 0.14em;
+}
+
+.field3d:focus-visible {
+  outline: 2px solid #ffc65c;
+  outline-offset: 2px;
+}
+
+.card {
+  border-radius: 20px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: linear-gradient(180deg, rgba(30, 44, 70, 0.85) 0%, rgba(17, 26, 44, 0.9) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 10px 24px rgba(0, 0, 0, 0.35);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 198, 92, 0.22);
+  background: rgba(255, 176, 32, 0.1);
+  padding: 0.2rem 0.6rem;
+  color: #ffd79a;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+/* ------------------------------------------------------------------ */
+/* 시간 모름 스위치                                                    */
+/* ------------------------------------------------------------------ */
+
+.switch3d {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+  padding: 0.65rem 0.8rem;
+  border-radius: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: linear-gradient(180deg, #0c1526 0%, #121d33 100%);
+  box-shadow:
+    inset 0 2px 6px rgba(0, 0, 0, 0.6),
+    0 1px 0 rgba(255, 255, 255, 0.04);
+  touch-action: manipulation;
+}
+
+.switch3d__track {
+  position: relative;
+  flex: none;
+  width: 44px;
+  height: 26px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #070d18 0%, #1a2439 100%);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.8);
+}
+
+.switch3d__knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #8494b1 0%, #4a5771 100%);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  transition:
+    transform 160ms cubic-bezier(0.3, 0.9, 0.3, 1),
+    background 160ms ease;
+}
+
+.switch3d.is-on .switch3d__knob {
+  transform: translateX(18px);
+  background: linear-gradient(180deg, #ffd37a 0%, #d98a0b 100%);
+  box-shadow:
+    0 2px 6px rgba(255, 170, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+.switch3d:focus-visible {
+  outline: 2px solid #ffc65c;
+  outline-offset: 2px;
+}
+
+/* ------------------------------------------------------------------ */
+/* 시트 · 유틸리티                                                     */
+/* ------------------------------------------------------------------ */
+
+.sheet-backdrop {
+  animation: sheetFade 180ms ease-out;
+}
+
+.sheet-panel {
+  animation: sheetUp 260ms cubic-bezier(0.22, 0.9, 0.3, 1);
+}
+
+@keyframes sheetFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes sheetUp {
+  from {
+    transform: translateY(24px);
+    opacity: 0.6;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.safe-bottom {
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 0.9rem);
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn3d,
+  .key3d,
+  .switch3d__knob,
+  .sheet-panel,
+  .sheet-backdrop {
+    animation: none !important;
+    transition: none !important;
+  }
+}
