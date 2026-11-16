@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0F172A" />
+    <meta
+      name="description"
+      content="년·월·일·시의 간지를 넣으면 24절기와 육십갑자를 역산해 양력·음력 생년월일시를 찾아주는 앱."
+    />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="사주 역산" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+    <link rel="manifest" href="./manifest.json" />
+    <title>사주 역산 — 간지로 생년월일시 찾기</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>
+      <p style="padding: 24px; color: #e8eef8; font-family: sans-serif">
+        이 앱을 사용하려면 JavaScript를 켜 주세요.
+      </p>
+    </noscript>
+
+    <script>
+      // index.html 파일을 탐색기에서 직접 열면(module 스크립트는 file:// 에서 동작하지 않음)
+      // 빈 화면 대신 실행 방법을 안내한다.
+      if (location.protocol === 'file:') {
+        var box = document.createElement('div');
+        box.setAttribute(
+          'style',
+          'max-width:520px;margin:12vh auto;padding:28px 24px;border-radius:20px;' +
+            'background:linear-gradient(180deg,#1e2c46 0%,#111a2c 100%);' +
+            'border:1px solid rgba(148,163,184,.18);box-shadow:0 10px 24px rgba(0,0,0,.45);' +
+            'color:#e8eef8;font-family:system-ui,-apple-system,"Malgun Gothic",sans-serif;line-height:1.7',
+        );
+        box.innerHTML =
+          '<h1 style="margin:0 0 12px;font-size:20px;color:#ffd79a">앱을 실행하는 방법</h1>' +
+          '<p style="margin:0 0 14px">이 HTML 파일을 직접 열면 앱이 실행되지 않습니다.</p>' +
+          '<p style="margin:0 0 14px">프로젝트 폴더의 <b style="color:#fff">사주 역산.exe</b> 를 더블클릭하세요. ' +
+          '브라우저에서 앱이 열립니다.</p>' +
+          '<p style="margin:0;font-size:13px;color:#93a4c0">다른 방법: 프로젝트 폴더에서 <code>start.cmd</code> 실행</p>';
+        document.body.innerHTML = '';
+        document.body.appendChild(box);
+      }
+    </script>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
