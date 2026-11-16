@@ -18,27 +18,51 @@ npm run validate # 1900~2030 절기·사주·음력을 manseryeok과 대조 (개
 npm run gen:vsop # VSOP87D 지구 황경 계수 테이블 재생성
 ```
 
+> **`node_modules`(의존성)와 `dist`(빌드 결과)는 저장소에 포함하지 않는다.** 새로 내려받은 폴더라면
+> `npm install` 을 먼저 실행해야 한다. 지금 이 폴더에는 빌드된 `dist/` 가 남아 있으므로
+> `사주 역산.exe` 를 더블클릭하면 Node.js 없이도 바로 실행된다.
+
+### Windows 에서 실행
+
+- **`사주 역산.exe` 더블클릭** — 브라우저가 열리고 트레이 아이콘으로 상주한다(종료는 트레이 아이콘 우클릭).
+  `dist/` 가 없거나 소스가 더 최신이면 Node.js 로 자동 재빌드한다.
+- **`start.cmd` 더블클릭** — `node_modules` 가 없으면 `npm install` 을 먼저 수행한 뒤 빌드·미리보기한다.
+
 ## 배포 (GitHub Pages)
 
 빌드는 상대 경로(`base: './'`)로 만들어지므로 `https://<아이디>.github.io/<저장소>/` 같은 하위 경로에서도
 자산·매니페스트·Service Worker 가 모두 동작한다. `.github/workflows/deploy.yml` 이 `main` 브랜치에
 푸시될 때마다 빌드 후 Pages 로 배포한다.
 
+이 폴더에는 이미 `main` 브랜치 최초 커밋이 만들어져 있으므로, 원격만 연결하면 바로 푸시할 수 있다.
+저장소에 올라가는 것은 소스 **37개 파일 · 약 648KB** 이고, `node_modules`·`dist` 는 `.gitignore` 로 제외된다.
+
 1. GitHub 에서 새 저장소를 만든다 (Public).
 2. 이 폴더에서 저장소를 연결하고 푸시한다.
 
 ```bash
-git init -b main
-git add .
-git commit -m "사주 역산 PWA"
+git remote -v                                    # 원격이 비어 있는지 확인 (아무것도 안 나오면 정상)
 git remote add origin https://github.com/<아이디>/<저장소>.git
 git push -u origin main
 ```
+
+   - 이미 `origin` 이 잡혀 있다면 주소만 바꾼다: `git remote set-url origin <주소>`
+   - 인증 오류가 나면 비밀번호 자리에 **Personal Access Token** 을 넣는다(2단계 인증 사용 시 필수).
 
 3. 저장소 → **Settings → Pages → Build and deployment → Source** 를 `GitHub Actions` 로 선택한다.
 4. **Actions** 탭의 `Deploy PWA to GitHub Pages` 가 끝나면 표시되는 주소를 공유한다.
    - 예: `https://<아이디>.github.io/<저장소>/`
 5. 휴대폰에서 그 주소를 열고 우측 상단 **설치** 버튼(또는 브라우저 메뉴)으로 홈 화면에 추가한다.
+
+### 이후 수정 사항 배포
+
+```bash
+git add -A
+git commit -m "변경 내용"
+git push
+```
+
+`main` 에 푸시할 때마다 Actions 가 다시 빌드·배포하며, 앱은 새로 접속할 때 자동으로 갱신된다.
 
 > 저장소 루트(예: `<아이디>.github.io`)에 배포해도 상대 경로라 그대로 동작한다.
 
@@ -46,6 +70,10 @@ git push -u origin main
 
 ```
 .
+├── 사주 역산.exe                # Windows 실행 런처 (dist/ 를 서빙, 트레이 상주)
+├── start.cmd                   # Node.js 로 설치·빌드·미리보기
+├── launcher/Launcher.cs        # 사주 역산.exe 소스
+├── .github/workflows/deploy.yml # main 푸시 시 Pages 자동 배포
 ├── index.html                  # PWA 메타 태그, iOS 홈 화면 추가 설정
 ├── package.json
 ├── vite.config.ts              # React + VitePWA(Workbox) 설정
