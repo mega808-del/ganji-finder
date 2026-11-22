@@ -2,11 +2,11 @@
  * 사주팔자 역산 엔진.
  *
  * 기준
- *  - 시각: 한국 표준시(KST, UTC+9) 고정
+ *  - 시각: 한국 표준시(KST, UTC+9) 에 동경 127.5도 기준 -30분 보정
  *  - 세수(年柱): 입춘 절입 시각에 바뀐다
  *  - 월건(月柱): 12절(입춘·경칩·청명·입하·망종·소서·입추·백로·한로·입동·대설·소한)에 바뀐다
  *  - 일주(日柱): 자정(00:00)에 바뀐다 (야자시설)
- *  - 시주(時柱): 2시간 단위 12시지, 자시는 23:00~00:59
+ *  - 시주(時柱): 2시간 단위 12시지(-30분 보정), 자시는 23:30~01:29
  */
 import { firstMonthStem, ganjiIndex, hourBranchOf, hourPillarIndex, mod } from './ganji';
 import { getYearTerms } from './solar-terms';
@@ -126,7 +126,7 @@ export function pillarsAt(timestamp: number): FourPillars {
   const jdn = gregorianToJdn(parts.year, parts.month, parts.day);
   const dayGanji = mod(jdn - DAY_PILLAR_ANCHOR_JDN, 60);
 
-  const hourBranch = hourBranchOf(parts.hour);
+  const hourBranch = hourBranchOf(parts.hour, parts.minute);
   const hourGanji = hourPillarIndex(dayGanji % 10, hourBranch);
 
   return {

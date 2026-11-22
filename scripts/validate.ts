@@ -7,7 +7,16 @@
  * 실행: npm run validate
  */
 import { calculateFourPillars, getSolarTermsOfYear } from 'manseryeok';
-import { BRANCHES, STEMS } from '../src/lib/ganji';
+import {
+  BRANCHES,
+  HOUR_TRADITIONAL_RANGES,
+  KST_CORRECTION_MINUTES,
+  STEMS,
+  ganjiIndex,
+  hourBranchOf,
+  mod,
+  tenGodName,
+} from '../src/lib/ganji';
 import { solarToLunar } from '../src/lib/lunar';
 import { kstParts, pillarsAt, reverseSearch } from '../src/lib/saju';
 import { getYearTerms } from '../src/lib/solar-terms';
@@ -47,11 +56,23 @@ function check(year: number, month: number, day: number, hour: number, minute: n
   const mine = pillarsAt(ms);
   const reference = calculateFourPillars({ year, month, day, hour, minute, dayBoundary: 'midnight' });
 
+  // 시지는 동경 127.5도 기준(-30분 보정)으로 판정하므로,
+  // 같은 날짜에서 보정된 시각으로 참조 시주를 구한다(일주는 자정 경계 그대로).
+  const corrected = mod(hour * 60 + minute + KST_CORRECTION_MINUTES, 1440);
+  const refHour = calculateFourPillars({
+    year,
+    month,
+    day,
+    hour: Math.floor(corrected / 60),
+    minute: corrected % 60,
+    dayBoundary: 'midnight',
+  }).hour;
+
   const mineText = [mine.yearGanji, mine.monthGanji, mine.dayGanji, mine.hourGanji]
     .map((ganji) => `${STEMS[ganji % 10]}${BRANCHES[ganji % 12]}`)
     .join(' ');
 
-  const refText = [reference.year, reference.month, reference.day, reference.hour]
+  const refText = [reference.year, reference.month, reference.day, refHour]
     .map((pillar) => `${pillar.heavenlyStem}${pillar.earthlyBranch}`)
     .join(' ');
 
@@ -85,6 +106,73 @@ for (let year = 1900; year <= 2030; year += 1) {
 }
 console.log(`[사주] ${checked}건 대조, 불일치 ${mismatches.length}건`);
 for (const line of mismatches.slice(0, 10)) console.log(' ', line);
+
+/* 2-1. 시지 경계 (-30분 보정) 대표 지점 확인 */
+const hourBoundaries: [number, number, number][] = [
+  [23, 29, 11],
+  [23, 30, 0],
+  [1, 29, 0],
+  [1, 30, 1],
+  [3, 29, 1],
+  [7, 30, 4],
+  [9, 29, 4],
+  [9, 30, 5],
+  [21, 29, 10],
+  [21, 30, 11],
+];
+const boundaryErrors = hourBoundaries
+  .filter(([hour, minute, expected]) => hourBranchOf(hour, minute) !== expected)
+  .map(([hour, minute, expected]) =>
+    `${hour}:${minute} 기대=${BRANCHES[expected]} 실제=${BRANCHES[hourBranchOf(hour, minute)]}`,
+  );
+console.log(`[시지] 경계 ${hourBoundaries.length}건 확인, 불일치 ${boundaryErrors.length}건`);
+for (const line of boundaryErrors) console.log(' ', line);
+
+/* 2-2. 십신 표기 — 만세력 예시(기유·무진·정축·갑진)와 대조 */
+const godSample = [
+  ganjiIndex(5, 9), // 기유
+  ganjiIndex(4, 4), // 무진
+  ganjiIndex(3, 1), // 정축
+  ganjiIndex(0, 4), // 갑진
+];
+const godExpected = ['식신', '상관', '일간', '정인'];
+const godActual = godSample.map((ganji, index) =>
+  index === 2 ? '일간' : tenGodName(godSample[2] % 10, ganji % 10),
+);
+const godErrors = godExpected
+  .map((expected, index) =>
+    expected === godActual[index]
+      ? null
+      : `${index}번째 기대=${expected} 실제=${godActual[index]}`,
+  )
+  .filter((line): line is string => line !== null);
+console.log(`[십신] ${godExpected.length}자리 확인, 불일치 ${godErrors.length}건`);
+for (const line of godErrors) console.log(' ', line);
+
+/* 2-3. 전통 12지지 구간 표기 — 23:00~01:00 부터 21:00~23:00 까지 고정값인지 대조 */
+const expectedRanges = [
+  '23:00~01:00',
+  '01:00~03:00',
+  '03:00~05:00',
+  '05:00~07:00',
+  '07:00~09:00',
+  '09:00~11:00',
+  '11:00~13:00',
+  '13:00~15:00',
+  '15:00~17:00',
+  '17:00~19:00',
+  '19:00~21:00',
+  '21:00~23:00',
+];
+const rangeErrors = expectedRanges
+  .map((expected, index) =>
+    HOUR_TRADITIONAL_RANGES[index] === expected
+      ? null
+      : `${BRANCHES[index]}시 기대=${expected} 실제=${HOUR_TRADITIONAL_RANGES[index]}`,
+  )
+  .filter((line): line is string => line !== null);
+console.log(`[구간] 전통 12지지 ${expectedRanges.length}건 확인, 불일치 ${rangeErrors.length}건`);
+for (const line of rangeErrors) console.log(' ', line);
 
 /* 3. 음력 변환 (평달 / 윤달) */
 const plain = solarToLunar(1990, 5, 15);
@@ -132,7 +220,15 @@ console.log(
     .join(', ')}`,
 );
 
-if (mismatches.length > 0 || bad.length > 0 || !lunarOk || maxDiffMs > 120_000) {
+if (
+  mismatches.length > 0 ||
+  boundaryErrors.length > 0 ||
+  godErrors.length > 0 ||
+  rangeErrors.length > 0 ||
+  bad.length > 0 ||
+  !lunarOk ||
+  maxDiffMs > 120_000
+) {
   console.error('검증 실패');
   process.exit(1);
 }
