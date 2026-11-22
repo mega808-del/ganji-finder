@@ -38,7 +38,7 @@ const PILLARS: { key: PillarKey; label: string; hanja: string }[] = [
 ];
 
 const MIN_YEAR = 1900;
-const MAX_YEAR = 2030;
+const MAX_YEAR = 2090;
 const YEARS = Array.from({ length: MAX_YEAR - MIN_YEAR + 1 }, (_, index) => MIN_YEAR + index);
 
 export default function App() {
@@ -253,7 +253,7 @@ export default function App() {
       <section className="mt-7">
         <SectionHeading step="02" title="사주팔자 입력" hint="방법 1 · 간지 선택" />
         <div className="mt-2.5 flex items-center gap-2">
-          <span className="w-9 shrink-0 text-[11px] font-bold text-slate-500">성별</span>
+          <span className="w-9 shrink-0 text-[11px] font-bold text-white/80">성별</span>
           <div className="grid flex-1 grid-cols-2 gap-2">
             {(['여', '남'] as Gender[]).map((value) => (
               <button
@@ -281,18 +281,20 @@ export default function App() {
                 className={`btn3d btn3d--row w-full ${muted ? 'btn3d--row-muted' : ''}`}
               >
                 <span className="text-left">
-                  <span className="block text-[10px] font-bold tracking-[0.24em] text-white/45">
-                    {label} · {hanja}
+                  <span className="block text-[10px] font-bold tracking-[0.24em]">
+                    <span className="text-white">{label}</span>
+                    <span className="text-white/70"> · </span>
+                    <span className="text-amber-300">{hanja}</span>
                   </span>
                   <span className="mt-1 flex items-center gap-2">
                     {muted ? (
                       <span className="text-xl font-black text-white/70">모름</span>
                     ) : value === null ? (
-                      <span className="text-xl font-black text-white/30">선택</span>
+                      <span className="text-xl font-black text-amber-300">선택</span>
                     ) : (
                       <>
                         <GanjiGlyphs ganji={value} size="md" />
-                        <span className="text-xs font-bold text-white/55">{ganjiKorean(value)}</span>
+                        <span className="text-xs font-bold text-white/85">{ganjiKorean(value)}</span>
                       </>
                     )}
                   </span>
@@ -325,7 +327,9 @@ export default function App() {
           <span className="flex-1 text-left text-[13px] font-extrabold text-white">
             태어난 시간 모름
           </span>
-          <span className="text-[11px] font-bold text-slate-500">
+          <span
+            className={`text-[11px] font-bold ${hourUnknown ? 'text-amber-300' : 'text-white/85'}`}
+          >
             {hourUnknown ? '시주 무관' : '시주 사용'}
           </span>
         </button>
@@ -333,10 +337,10 @@ export default function App() {
         {/* 방법 2 — 팔자 문자열 직접 입력 */}
         <div className="card mt-3 p-3">
           <div className="flex items-baseline justify-between gap-2">
-            <p className="text-[10px] font-bold tracking-[0.2em] text-amber-300/70">
+            <p className="text-[10px] font-bold tracking-[0.2em] text-amber-300">
               방법 2 · 팔자 직접 입력
             </p>
-            <span className="text-[10px] font-bold text-slate-500">한글 8글자</span>
+            <span className="text-[10px] font-bold text-white/80">한글 8글자</span>
           </div>
           <div className="mt-2 flex gap-2">
             <input
@@ -360,7 +364,7 @@ export default function App() {
           {palzaError ? (
             <p className="mt-2 text-[11px] font-bold leading-relaxed text-amber-300">{palzaError}</p>
           ) : (
-            <p className="mt-2 text-[11px] font-semibold text-slate-500">
+            <p className="mt-2 text-[11px] font-semibold text-white/70">
               년·월·일·시 순서로 천간+지지 (예: 경오신사경진임오)
             </p>
           )}
@@ -472,7 +476,7 @@ function SectionHeading({
         <span className="text-[11px] font-black tracking-[0.2em] text-amber-400/80">{step}</span>
         {title}
       </h2>
-      {hint && <span className="text-[11px] font-semibold text-slate-500">{hint}</span>}
+      {hint && <span className="text-[11px] font-semibold text-white/75">{hint}</span>}
     </div>
   );
 }
